@@ -58,6 +58,7 @@ jobs:
       - name: Deploy to AWS with SST
         run: |
           node -v
+          npx sst --version
           npx sst deploy --stage prod --region ap-south-1 --verbose
 
         env:
