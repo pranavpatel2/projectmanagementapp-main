@@ -57,7 +57,7 @@ jobs:
       # Deploy to SST (AWS) - Skip linting here
       - name: Deploy to AWS with SST
         run: |
-          
+          node -v
           npx sst deploy --stage prod --region ap-south-1 --verbose
 
         env:
