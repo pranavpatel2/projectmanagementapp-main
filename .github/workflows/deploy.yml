@@ -59,6 +59,8 @@ jobs:
         run: |
           node -v
           npx sst --version
+          npm install @serverless-stack/cli@latest
+          npx sst --version
           npx sst deploy --stage prod --region ap-south-1 --verbose
 
         env:
