@@ -1,4 +1,4 @@
-import { PrismaAdapter } from "@auth/prisma-adapter"; 
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import DiscordProvider from "next-auth/providers/discord";
@@ -12,9 +12,14 @@ declare module "next-auth" {
       email: string;
     } & DefaultSession["user"];
   }
+
+  interface JWT {
+    id: string;
+    email: string;
+  }
 }
 
-export const authConfig = {
+export const authConfig: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   session: {
     strategy: "jwt", // Store sessions in the database
@@ -58,7 +63,7 @@ export const authConfig = {
       },
     }),
   ],
-  
+
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -67,23 +72,19 @@ export const authConfig = {
       }
       console.log("JWT callback:", { token, user });
       return token;
-    }
-    ,
+    },
     async session({ session, token }) {
       if (token && token.id && token.email) {
-        session.user.id = token?.id as string;
-        session.user.email = token?.email as string;
-
+        session.user.id = token.id as string;
+        session.user.email = token.email as string;
       }
       console.log("Session callback:", { session, token });
       return session;
-    }
-    
-   
+    },
   },
-  
+
   pages: {
     signIn: "/auth/signin",
   },
   secret: process.env.AUTH_SECRET,
-} satisfies NextAuthConfig;
+};
